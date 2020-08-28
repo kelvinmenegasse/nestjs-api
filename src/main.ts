@@ -15,9 +15,11 @@ async function bootstrap() {
     return momentTimeZone(this).tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss.SSS');
   }
 
-  const port = configService.get('API_PORT');
+  const port = configService.get('port');
 
   await app.listen(port);
+
+  console.log(`SERVER IS RUNNING ON PORT ${port}`);
 }
 
 bootstrap();

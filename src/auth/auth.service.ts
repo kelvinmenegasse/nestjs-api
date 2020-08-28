@@ -1,14 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Account } from 'src/accounts/entities/account.entity';
-import { CredentialsDTO } from './dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { Account } from 'src/accounts/entities/account.entity';
+import { CredentialsDTO } from './dto';
 
 @Injectable()
 export class AuthService {
 
     constructor(
+        private configService: ConfigService,
         @InjectRepository(Account) private accountsRepository: Repository<Account>,
         private jwtService: JwtService
     ) { }
@@ -19,7 +21,7 @@ export class AuthService {
     }
 
     async login(credentials: CredentialsDTO): Promise<any> {
-        const { username, password } = credentials;
+        const { username, password, rememberMe } = credentials;
         console.log(new Date());
 
         const account: Account = await this.getByUsername(username);
@@ -36,12 +38,23 @@ export class AuthService {
             throw new UnauthorizedException(`Senha inválida`);
         }
 
+        const rnw: Date = new Date();
+
+        if (rememberMe) {
+            rnw.setHours( rnw.getMinutes() + this.configService.get('jwtRenewalTimeLong') );
+        } else {
+            rnw.setHours( rnw.getMinutes() + this.configService.get('jwtRenewalTimeDefault') );
+        }
+
+        console.log(rnw.getUTCDate());
+    
         const payload = {
             id: account.accountID,
             username: account.username,
             email: account.email,
             level: account.level,
-            token: this.jwtService.sign({username: account.username})
+            token: this.jwtService.sign({username: account.username}),
+            rnw: rnw.getUTCDate()
         };
 
         return payload;

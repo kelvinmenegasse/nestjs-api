@@ -5,8 +5,6 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
 
-    renewalTime = this.configService.get('jwtRenewalTime');
-
     constructor(
         private configService: ConfigService
     ) {
@@ -28,20 +26,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
             // token expirou, se foi a menos de uma hora ou igual, renova
             // se nao, erro 400
 
+            console.log(user);
+            console.log(info);
+
             if (info.name === 'TokenExpiredError') {
 
-                const expiredAt: any = new Date(info.expiredAt);
-                const now: any = new Date();
-                const str = (expiredAt.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " "));
-
-                const diff = Math.round(Math.abs(now as any - expiredAt) / 1000);
-                console.log(diff);
-                console.log(this.renewalTime)
-                console.log(`expirou em: ${str}`)
-                
-                if (diff <= this.renewalTime) {
-                    throw new UnauthorizedException();
-                }
+                throw new UnauthorizedException();
             }
 
             throw new BadRequestException;

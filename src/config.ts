@@ -1,8 +1,9 @@
 export const config = (): any => ({
-  port: Number(process.env.PORT),
+  port: Number(process.env.API_PORT),
   jwtKey: process.env.JWT_KEY,
   jwtExpirationTime: process.env.JWT_EXPIRATIONTIME,
-  jwtRenewalTime: process.env.JWT_RENEWALTIME,
+  jwtRenewalTimeDefault: process.env.JWT_RENEWALTIME_DEFAULT,
+  jwtRenewalTimeLong: process.env.JWT_RENEWALTIME_LONG,
   database: {
     type: process.env.DATABASE_TYPE,
     host: process.env.DATABASE_HOST,
