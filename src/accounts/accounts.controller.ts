@@ -4,7 +4,6 @@ import { Account } from './entities/account.entity';
 import { UpdateAccountDTO, AddAccountDTO } from './dto';
 import { ValidationParametersPipe } from 'src/shared/pipes/validation-parameters.pipe';
 import { AppController } from 'src/app.controller';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('api/admin/accounts')

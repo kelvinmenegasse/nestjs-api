@@ -12,7 +12,7 @@ export class AuthService {
     constructor(
         private configService: ConfigService,
         @InjectRepository(Account) private accountsRepository: Repository<Account>,
-        private jwtService: JwtService
+        public jwtService: JwtService
     ) { }
 
 
@@ -22,7 +22,6 @@ export class AuthService {
 
     async login(credentials: CredentialsDTO): Promise<any> {
         const { username, password, rememberMe } = credentials;
-        console.log(new Date());
 
         const account: Account = await this.getByUsername(username);
 
@@ -41,23 +40,26 @@ export class AuthService {
         const rnw: Date = new Date();
 
         if (rememberMe) {
-            rnw.setHours( rnw.getMinutes() + this.configService.get('jwtRenewalTimeLong') );
+            rnw.setTime( 
+                rnw.getTime() + 
+                ( this.configService.get('jwtRenewalTimeLong') * 1000 )
+            );
         } else {
-            rnw.setHours( rnw.getMinutes() + this.configService.get('jwtRenewalTimeDefault') );
+            rnw.setTime( 
+                rnw.getTime() + 
+                ( this.configService.get('jwtRenewalTimeDefault') * 1000 )
+            );
         }
 
-        console.log(rnw.getUTCDate());
-    
-        const payload = {
+        const token = this.jwtService.sign({
             id: account.accountID,
             username: account.username,
             email: account.email,
             level: account.level,
-            token: this.jwtService.sign({username: account.username}),
-            rnw: rnw.getUTCDate()
-        };
+            rnw: rnw.toISOString()
+        })
 
-        return payload;
+        return token;
     }
 
 
