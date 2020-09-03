@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth.service';
 import { Request } from 'express';
 import { AuthPayload } from '../dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -19,7 +20,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         // Add your custom authentication logic here
         // for example, call super.logIn(request) to establish a session.
         // const request = context.switchToHttp().getRequest();
-        
+
         const request = context.switchToHttp().getRequest();
 
         this.validateRequest(request);
@@ -27,42 +28,41 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         return super.canActivate(context);
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    handleRequest(err, user, info) {
-        if (err) { throw err; }
-
-        if (!user) {
-            // token expirou, se foi a menos de uma hora ou igual, renova
-            // se nao, erro 400
-
-            if (info.name === 'TokenExpiredError') {
-
-                throw new UnauthorizedException();
-            }
-
-            throw new BadRequestException;
-
-        }
-
-        return user;
-    }
-
     validateRequest(request: Request): void {
+
         const headers = request.headers;
 
         if (headers.authorization) {
-            const token: string = this.extractJWT(headers.authorization);
-            const payload: AuthPayload | any = this.authService.jwtService.decode(token);
+            const token: string = this.authService.extractJWT(headers.authorization);
 
-            // check payload rnw date
-            if (payload.rnw) {
-                
+            const payload: AuthPayload = this.authService.jwtService.decode(token) as AuthPayload;
+
+            if (!payload) {
+                throw new BadRequestException();
+            }
+
+            const currentDate = moment().unix();
+
+            const isExpired = currentDate > payload.exp;
+
+            if (isExpired) {
+
+                const isAllowToRenewal = currentDate > payload.rnw;
+
+                if (!isAllowToRenewal) {
+                    throw new UnauthorizedException({
+                        "statusCode": 401,
+                        "message": "Token Expired"
+                    });
+                } {
+                    throw new UnauthorizedException({
+                        "statusCode": 401,
+                        "message": "Unauthorized"
+                    });
+                }
             }
         }
     }
 
-    extractJWT(bearerToken: string): string {
-        const token: string = bearerToken.split(' ')[1];
-        return token;
-    }
+
 }

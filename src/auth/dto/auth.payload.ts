@@ -20,5 +20,9 @@ export class AuthPayload {
 
     @IsNotEmpty()
     @IsDate()
-    rnw: Date;
+    exp: number;
+
+    @IsNotEmpty()
+    @IsDate()
+    rnw: number;
 }
