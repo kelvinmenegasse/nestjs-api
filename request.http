@@ -1,59 +1,70 @@
 ### Requests from API
 
-### Auth
-    ### Login para gerar token
-    POST /api/auth/login HTTP/1.1
-    Host: localhost:3000
-    Content-Type: application/json
+### AUTH
 
-    {
-        "username": "admin",
-        "password": "12345",
-        "rememberMe": false
-    }
+### Login para gerar token
+POST /api/auth/login HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
 
-### Account
-    ### List
-    GET /api/admin/accounts/list HTTP/1.1
-    Host: localhost:3000
-    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJudyI6MTU5OTE1NjIyMCwiaWF0IjoxNTk5MTU2MTAwLCJleHAiOjE1OTkxNTYxNjB9.W6OlFv0yVFErP6H2_WJvDwxlnPnNI1a4F0wCSrUEPX8
+{
+    "username": "admin",
+    "password": "12345",
+    "rememberMe": false
+}
 
-
-    ### Add
-    POST /api/admin/accounts/add HTTP/1.1
-    Host: localhost:3000
-    Authorization: Bearer <token>
-    Content-Type: application/json
-
-    {
-        "username": "test",
-        "email": "test@test.com",
-        "password": "test",
-        "fullname": "test",
-        "level": "user"
-    }
-
-    ### Update
-    POST /api/admin/accounts/update/1 HTTP/1.1
-    Host: localhost:3000
-    Authorization: Bearer <token>
-    Content-Type: application/json
-
-    {
-        "username": "admin",
-        "email": "admin@admin.com",
-        "password": "password",
-        "fullname": "administrator",
-        "level": "administrator"
-    }
-
-    ### Remove
-    POST /api/admin/accounts/remove/1 HTTP/1.1
-    Host: localhost:3000
-    Authorization: Bearer <token>
+### Refresh token
+POST /api/auth/login HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+{
+    "username": "admin",
+    "password": "12345",
+    "rememberMe": false
+}
 
 
-    ### Permanently Delete
-    POST /api/admin/accounts/delete/1 HTTP/1.1
-    Host: localhost:3000
-    Authorization: Bearer <token>
+
+
+### ACCOUNT
+
+### List
+GET /api/admin/accounts/list HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNTk5NTg0ODgxLCJpYXQiOjE1OTk1ODQ3NjEsImV4cCI6MTU5OTU4NDgyMX0.m3sDH8cgTxJPGG8VXYciue5zFJ-IyoZtfrQh_vwh0_M
+
+### Add
+POST /api/admin/accounts/add HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer <token>
+Content-Type: application/json
+{
+    "username": "test",
+    "email": "test@test.com",
+    "password": "test",
+    "fullname": "test",
+    "level": "user"
+}
+
+### Update
+POST /api/admin/accounts/update/1 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer <token>
+Content-Type: application/json
+{
+    "username": "admin",
+    "email": "admin@admin.com",
+    "password": "password",
+    "fullname": "administrator",
+    "level": "administrator"
+}
+
+### Remove
+POST /api/admin/accounts/remove/1 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer <token>
+
+### Permanently Delete
+POST /api/admin/accounts/delete/1 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer <token>

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, IsNumber, IsDate } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsNumber, IsDate, IsBoolean } from 'class-validator';
 
 export class AuthPayload {
 
@@ -25,4 +25,8 @@ export class AuthPayload {
     @IsNotEmpty()
     @IsDate()
     rnw: number;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    remember: boolean;
 }

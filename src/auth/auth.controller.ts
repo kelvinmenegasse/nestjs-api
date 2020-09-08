@@ -12,7 +12,7 @@ export class AuthController {
 
     @Post('login')
     @UsePipes(ValidationPipe)
-    async login(@Body() credentialsDTO: CredentialsDTO): Promise<AuthPayload> {
+    async login(@Body() credentialsDTO: CredentialsDTO): Promise<string> {
         return await this.authService.login(credentialsDTO);
     }
 
@@ -24,8 +24,8 @@ export class AuthController {
 
     @Post('refresh-token')
     @UsePipes(ValidationPipe)
-    async refreshToken(): Promise<any> {
-        return null;
+    async refreshToken(@Body() expiredToken: string): Promise<string> {
+        return await this.authService.refresh(expiredToken);
     }
 
     @Post('recovery-account')
