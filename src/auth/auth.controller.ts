@@ -1,7 +1,7 @@
 import { Controller, Logger, Post, UsePipes, ValidationPipe, Body, UseGuards } from '@nestjs/common';
 import { AppController } from 'src/app.controller';
 import { AuthService } from './auth.service';
-import { CredentialsDTO, AuthPayload } from './dto';
+import { CredentialsDTO, AuthPayload, RecoveryCredentialsDTO } from './dto';
 
 @Controller('api/auth')
 export class AuthController {
@@ -18,8 +18,8 @@ export class AuthController {
 
     @Post('verify-token')
     @UsePipes(ValidationPipe)
-    async verifyToken(): Promise<any> {
-        return null;
+    async verifyToken(@Body() token: string): Promise<string> {
+        return await this.authService.verify(token);
     }
 
     @Post('refresh-token')
@@ -28,11 +28,20 @@ export class AuthController {
         return await this.authService.refresh(expiredToken);
     }
 
-    @Post('recovery-account')
+    @Post('send-recovery-key')
     @UsePipes(ValidationPipe)
-    async recoveryAccount(@Body() username: string): Promise<any> {
-        return null;
+    async sendRecoveryKey(@Body() username: string): Promise<any> {
+        return await this.authService.sendRecoveryKey(username);
     }
+    
+    
+    @Post('login-recovery-key')
+    @UsePipes(ValidationPipe)
+    async loginRecoveryKey(@Body() recoveryCredentialsDTO: RecoveryCredentialsDTO): Promise<any> {
+        return await this.authService.loginRecoveryKey(recoveryCredentialsDTO);
+    }
+
+
 }
 
 

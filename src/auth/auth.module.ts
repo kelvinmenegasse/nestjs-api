@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/auth.guard';
@@ -8,6 +8,7 @@ import { authProviders } from './auth.providers';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from 'src/accounts/entities/account.entity';
+import { AccountsModule } from 'src/accounts/accounts.module';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { Account } from 'src/accounts/entities/account.entity';
     TypeOrmModule.forFeature([Account]),
     ...authProviders,
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    forwardRef (() => AccountsModule)
   ],
   controllers: [
     AuthController

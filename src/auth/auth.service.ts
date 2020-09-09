@@ -4,30 +4,26 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Account } from 'src/accounts/entities/account.entity';
-import { CredentialsDTO, AuthPayload } from './dto';
+import { CredentialsDTO, AuthPayload, RecoveryCredentialsDTO } from './dto';
 import * as moment from 'moment';
+import { AccountsService } from 'src/accounts/accounts.service';
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private configService: ConfigService,
-        @InjectRepository(Account) private accountsRepository: Repository<Account>,
-        public jwtService: JwtService
+        public jwtService: JwtService,
+        private accountService: AccountsService,
     ) { }
-
-
-    async getActiveUsername(username: string): Promise<Account>{
-        return await this.accountsRepository.findOne({ username, status: 'ativo' });
-    }
 
     async login(credentials: CredentialsDTO): Promise<string> {
         const { username, password, rememberMe } = credentials;
 
-        const account: Account = await this.getActiveUsername(username);
+        const account: Account = await this.accountService.getActiveUsername(username);
 
         if (!account) {
-            throw new UnauthorizedException(`Usuário não encontrado`);   
+            throw new UnauthorizedException(`Usuário não encontrado`);
         }
 
         if (!account.comparePassword(password)) {
@@ -38,14 +34,14 @@ export class AuthService {
     }
 
     async refresh(expiredToken: string): Promise<string> {
-        
+
         const payload: AuthPayload = this.jwtService.decode(expiredToken) as AuthPayload;
 
         if (!payload) {
             throw new BadRequestException();
         }
 
-        const account: Account = await this.getActiveUsername(payload.username);
+        const account: Account = await this.accountService.getActiveUsername(payload.username);
 
         if (!account) {
             throw new UnauthorizedException({
@@ -64,38 +60,61 @@ export class AuthService {
                 "message": "Unauthorized"
             });
         }
-        
+
         return this.createToken(account, payload.remember);
-        
+
     }
 
     async verify(token: string): Promise<any> {
-        
+
         const payload: AuthPayload = this.jwtService.decode(token) as AuthPayload;
 
         if (!payload) {
             throw new BadRequestException();
         }
 
-        const account: Account = await this.getActiveUsername(payload.username);
+        const account: Account = await this.accountService.getActiveUsername(payload.username);
 
         // corrigir no front end
         if (!account) {
-            throw new UnauthorizedException({
-                "statusCode": 401,
-                "message": "Unauthorized"
+            return JSON.stringify({
+                message: 'Token invalid',
+                type: 'error',
             });
         }
 
         return JSON.stringify({
             message: 'Token valid',
-            type:'success',
+            type: 'success',
         });
     }
 
-    createToken(account: Account, remember: boolean): string {
+    
+    async sendRecoveryKey(username): Promise<any> {
+        // verificar usuario
+        // criar chave
+        // salvar chave na conta
+        // enviar chave por email e retornar o resultadp
+        return null;
+    }
+
+    async loginRecoveryKey(recoveryRredentials: RecoveryCredentialsDTO): Promise<string> {
+        const { username, newPassword, recoveryKey } = recoveryRredentials;
+
+        const account: Account = await this.accountService.verifyRecoveryKey(username, recoveryKey);
+
+        if (!account) {
+            throw new UnauthorizedException(`Usuário e/ou código de recuperação inválido(s)`);
+        }
+
+        const updatedAccount = await this.accountService.changePasswordWithRecoveryKey(account, newPassword);
+
+        return this.createToken(updatedAccount);
+    }
+
+    createToken(account: Account, remember = false): string {
         const rnwTimestamp = this.createRenewalTime();
-        
+
         const token = this.jwtService.sign({
             id: account.accountID,
             username: account.username,
@@ -115,7 +134,7 @@ export class AuthService {
         const renewalTimeOption = rememberMe ? 'jwtRenewalTimeLong' : 'jwtRenewalTimeDefault';
 
         const renewalTimeValue = this.configService.get(renewalTimeOption);
-    
+
         rnw.add(renewalTimeValue, 's');
 
         // return a timestamp value

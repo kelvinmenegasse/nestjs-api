@@ -30,12 +30,26 @@ export class Account extends BaseEntity {
     accountID: number;
 
     @BeforeInsert()
-    async hashPassword(): Promise<void> {
+    async hashPassword(newPassword: string = null): Promise<void> {
+        this.password = newPassword !== null ? newPassword : this.password;
+
         this.password = await bcrypt.hash(this.password, 10);
     }
 
     async comparePassword(attempt: string): Promise<any> {
         return await bcrypt.compare(attempt, this.password);
+    }
+
+    async generateRecoveryKey(length = 10): Promise<void> {
+        let generatedPassword = '';
+
+        const charPossible = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+        for (let i = 0; i < length; i++) {
+          generatedPassword += charPossible.charAt(Math.floor(Math.random() * charPossible.length));
+        }
+
+        this.recoveryKey = generatedPassword;
     }
 
     isActive(): boolean {

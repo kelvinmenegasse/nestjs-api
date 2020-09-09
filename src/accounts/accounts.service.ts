@@ -36,7 +36,7 @@ export class AccountsService {
         if (isUsernameFound) {
             throw new BadRequestException(`Usuário "${username}" já cadastrado`);
         }
-                                         // alvo  // fonte dos dados
+
         const newAccount = Object.assign(new Account(), account);
 
         return await this.accountsRepository.save(newAccount);
@@ -53,7 +53,6 @@ export class AccountsService {
         const newAccount = Object.assign(accountFound, updateAccount);
 
         return await this.accountsRepository.save(newAccount);
-
     }
 
     async removeAccount(accountID: number): Promise<Account> {
@@ -82,5 +81,28 @@ export class AccountsService {
 
         return await this.accountsRepository.delete(accountID);
 
+    }
+
+    async getActiveUsername(username: string): Promise<Account>{
+        return await this.accountsRepository.findOne({
+            username, status: 'ativo' }
+        );
+    }
+
+    async verifyRecoveryKey(username: string, recoveryKey: string): Promise<Account>{
+        return await this.accountsRepository.findOne({
+            where:
+                { username, recoveryKey, status: 'ativo' }
+        });
+    }
+
+    async changePasswordWithRecoveryKey(account: Account, newPassword: string): Promise<Account> {
+
+        const updatedAccount: Account = account;
+
+        updatedAccount.hashPassword(newPassword);
+        updatedAccount.recoveryKey = null;
+
+        return await this.accountsRepository.save(updatedAccount);
     }
 }

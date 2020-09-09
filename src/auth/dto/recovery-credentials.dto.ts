@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail, IsOptional, IsBoolean } from 'class-validator';
 
-export class CredentialsDTO {
+export class RecoveryCredentialsDTO {
 
     @IsNotEmpty()
     @IsString()
@@ -8,10 +8,9 @@ export class CredentialsDTO {
 
     @IsNotEmpty()
     @IsString()
-    password: string;
+    newPassword: string;
 
     @IsOptional()
-    @IsBoolean()
-    rememberMe?: boolean;
-
+    @IsString()
+    recoveryKey: string;
 }
