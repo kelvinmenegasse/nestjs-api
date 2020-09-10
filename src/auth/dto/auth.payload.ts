@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsEmail, IsNumber, IsDate, IsBoolean } from 'class-validator';
+import * as moment from 'moment';
 
 export class AuthPayload {
 
@@ -29,4 +30,15 @@ export class AuthPayload {
     @IsNotEmpty()
     @IsBoolean()
     remember: boolean;
+
+    constructor(payload: AuthPayload) {
+        Object.assign(this, payload);
+    }
+
+    public isAllowToRenewal(): boolean {
+        const currentDate = moment().unix();
+        
+        return this.rnw > currentDate;
+    }
+
 }

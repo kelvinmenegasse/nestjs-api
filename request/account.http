@@ -1,37 +1,9 @@
-### Requests from API
-
-### AUTH
-
-### Login para gerar token
-POST /api/auth/login HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json
-
-{
-    "username": "admin",
-    "password": "12345",
-    "rememberMe": false
-}
-
-### Refresh token
-POST /api/auth/login HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json
-{
-    "username": "admin",
-    "password": "12345",
-    "rememberMe": false
-}
-
-
-
-
 ### ACCOUNT
 
 ### List
 GET /api/admin/accounts/list HTTP/1.1
 Host: localhost:3000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNTk5NTg0ODgxLCJpYXQiOjE1OTk1ODQ3NjEsImV4cCI6MTU5OTU4NDgyMX0.m3sDH8cgTxJPGG8VXYciue5zFJ-IyoZtfrQh_vwh0_M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNTk5NzM4NzcyLCJpYXQiOjE1OTk3Mzg2NTIsImV4cCI6MTU5OTczODcxMn0.Vsq7of5q-BsQxh2N-pzN2y9tx42J_kWNP0lOO6XwT7M
 
 ### Add
 POST /api/admin/accounts/add HTTP/1.1

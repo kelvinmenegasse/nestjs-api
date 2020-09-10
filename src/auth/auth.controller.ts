@@ -1,4 +1,4 @@
-import { Controller, Logger, Post, UsePipes, ValidationPipe, Body, UseGuards } from '@nestjs/common';
+import { Controller, Logger, Post, UsePipes, ValidationPipe, Body, UseGuards, Headers } from '@nestjs/common';
 import { AppController } from 'src/app.controller';
 import { AuthService } from './auth.service';
 import { CredentialsDTO, AuthPayload, RecoveryCredentialsDTO } from './dto';
@@ -16,24 +16,25 @@ export class AuthController {
         return await this.authService.login(credentialsDTO);
     }
 
-    @Post('verify-token')
-    @UsePipes(ValidationPipe)
-    async verifyToken(@Body() token: string): Promise<string> {
-        return await this.authService.verify(token);
-    }
-
     @Post('refresh-token')
     @UsePipes(ValidationPipe)
-    async refreshToken(@Body() expiredToken: string): Promise<string> {
-        return await this.authService.refresh(expiredToken);
+    async refreshToken(@Headers() headers: { authorization: string }): Promise<string> {
+        const token: string = this.authService.extractJWT(headers.authorization);
+        return await this.authService.refresh(token);
+    }
+
+    @Post('verify-token')
+    @UsePipes(ValidationPipe)
+    async verifyToken(@Headers() headers: { authorization: string }): Promise<string> {
+        const token: string = this.authService.extractJWT(headers.authorization);
+        return await this.authService.verify(token);
     }
 
     @Post('send-recovery-key')
     @UsePipes(ValidationPipe)
-    async sendRecoveryKey(@Body() username: string): Promise<any> {
-        return await this.authService.sendRecoveryKey(username);
+    async sendRecoveryKey(@Body() credentialsDTO: Partial<CredentialsDTO>): Promise<any> {
+        return await this.authService.sendRecoveryKey(credentialsDTO.username);
     }
-    
     
     @Post('login-recovery-key')
     @UsePipes(ValidationPipe)

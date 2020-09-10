@@ -1,0 +1,49 @@
+### Requests from API
+
+### AUTH
+
+### Login to get token
+POST /api/auth/login HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "12345",
+    "rememberMe": false
+}
+
+
+
+### Refresh token
+POST /api/auth/refresh-token HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNTk5NzQ2MDIxLCJpYXQiOjE1OTk3NDU0MjEsImV4cCI6MTU5OTc0NTcyMX0.KKCjWKWbikFzQoXw9iD7w4PPAOLaPonYt0AnqZ1waEk
+
+
+### Verify token
+POST /api/auth/verify-token HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNTk5NzQ2NzEzLCJpYXQiOjE1OTk3NDYxMTMsImV4cCI6MTU5OTc0NjQxM30.qVzr8Z8GVodiLTAWMaTiJlmMtB4cJQ7Wz4gYGdCHvTg
+
+### Send Recovery Key
+POST /api/auth/send-recovery-key HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "admin"
+}
+
+
+### Login with Recovery Key
+POST /api/auth/login-recovery-key HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "newPassword": "12345",
+    "recoveryKey": "xa0dKzCoRy"
+}

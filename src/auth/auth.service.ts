@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Account } from 'src/accounts/entities/account.entity';
+import { AccountsService } from 'src/accounts/accounts.service';
 import { CredentialsDTO, AuthPayload, RecoveryCredentialsDTO } from './dto';
 import * as moment from 'moment';
-import { AccountsService } from 'src/accounts/accounts.service';
 
 @Injectable()
 export class AuthService {
@@ -35,26 +35,15 @@ export class AuthService {
 
     async refresh(expiredToken: string): Promise<string> {
 
-        const payload: AuthPayload = this.jwtService.decode(expiredToken) as AuthPayload;
-
+        const payload: AuthPayload = new AuthPayload(this.jwtService.decode(expiredToken) as AuthPayload);
+       
         if (!payload) {
             throw new BadRequestException();
         }
-
+       
         const account: Account = await this.accountService.getActiveUsername(payload.username);
 
-        if (!account) {
-            throw new UnauthorizedException({
-                "statusCode": 401,
-                "message": "Unauthorized"
-            });
-        }
-
-        const currentDate = moment().unix();
-
-        const isAllowToRenewal = currentDate > payload.rnw;
-
-        if (!isAllowToRenewal) {
+        if (!account || !payload.isAllowToRenewal()) {
             throw new UnauthorizedException({
                 "statusCode": 401,
                 "message": "Unauthorized"
@@ -67,7 +56,7 @@ export class AuthService {
 
     async verify(token: string): Promise<any> {
 
-        const payload: AuthPayload = this.jwtService.decode(token) as AuthPayload;
+        const payload: AuthPayload = new AuthPayload(this.jwtService.decode(token) as AuthPayload);
 
         if (!payload) {
             throw new BadRequestException();
@@ -75,8 +64,7 @@ export class AuthService {
 
         const account: Account = await this.accountService.getActiveUsername(payload.username);
 
-        // corrigir no front end
-        if (!account) {
+        if (!account || !payload.isAllowToRenewal()) {
             return JSON.stringify({
                 message: 'Token invalid',
                 type: 'error',
@@ -90,12 +78,18 @@ export class AuthService {
     }
 
     
-    async sendRecoveryKey(username): Promise<any> {
-        // verificar usuario
-        // criar chave
-        // salvar chave na conta
-        // enviar chave por email e retornar o resultadp
-        return null;
+    async sendRecoveryKey(username: string): Promise<any> {
+
+        const account: Account = await this.accountService.getActiveUsername(username);
+
+        if (!account) {
+            throw new UnauthorizedException(`Usuário não encontrado`);
+        }
+
+        const updatedAccount = await this.accountService.generateRecoveryKey(account);
+
+        // send email;
+        return updatedAccount;
     }
 
     async loginRecoveryKey(recoveryRredentials: RecoveryCredentialsDTO): Promise<string> {
@@ -108,7 +102,7 @@ export class AuthService {
         }
 
         const updatedAccount = await this.accountService.changePasswordWithRecoveryKey(account, newPassword);
-
+        // send email;
         return this.createToken(updatedAccount);
     }
 
@@ -145,15 +139,6 @@ export class AuthService {
         const token: string = bearerToken.split(' ')[1];
         return token;
     }
-
-
-
-    // login => req credentials res token
-    // verify token req token res true/false
-    // refresh token req token res token
-    // send recovery key  req username send email with recovery key
-    // login recovery key credentials + recovery key
-
 
 
 }

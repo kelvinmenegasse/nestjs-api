@@ -89,6 +89,14 @@ export class AccountsService {
         );
     }
 
+    
+    async generateRecoveryKey(account: Account): Promise<Account> {
+        
+        account.generateRecoveryKey();
+        
+        return await this.accountsRepository.save(account);
+    }    
+    
     async verifyRecoveryKey(username: string, recoveryKey: string): Promise<Account>{
         return await this.accountsRepository.findOne({
             where:
@@ -98,11 +106,10 @@ export class AccountsService {
 
     async changePasswordWithRecoveryKey(account: Account, newPassword: string): Promise<Account> {
 
-        const updatedAccount: Account = account;
+        account.hashPassword(newPassword);
+        account.recoveryKey = null;
 
-        updatedAccount.hashPassword(newPassword);
-        updatedAccount.recoveryKey = null;
-
-        return await this.accountsRepository.save(updatedAccount);
+        return await this.accountsRepository.save(account);
     }
+    
 }
