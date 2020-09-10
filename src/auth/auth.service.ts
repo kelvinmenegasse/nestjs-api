@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { MailerService } from '@nestjs-modules/mailer';
 import { Account } from 'src/accounts/entities/account.entity';
 import { AccountsService } from 'src/accounts/accounts.service';
 import { CredentialsDTO, AuthPayload, RecoveryCredentialsDTO } from './dto';
@@ -15,6 +16,7 @@ export class AuthService {
         private configService: ConfigService,
         public jwtService: JwtService,
         private accountService: AccountsService,
+        private mailerService: MailerService,
     ) { }
 
     async login(credentials: CredentialsDTO): Promise<string> {
@@ -36,11 +38,11 @@ export class AuthService {
     async refresh(expiredToken: string): Promise<string> {
 
         const payload: AuthPayload = new AuthPayload(this.jwtService.decode(expiredToken) as AuthPayload);
-       
+
         if (!payload) {
             throw new BadRequestException();
         }
-       
+
         const account: Account = await this.accountService.getActiveUsername(payload.username);
 
         if (!account || !payload.isAllowToRenewal()) {
@@ -77,7 +79,7 @@ export class AuthService {
         });
     }
 
-    
+
     async sendRecoveryKey(username: string): Promise<any> {
 
         const account: Account = await this.accountService.getActiveUsername(username);
@@ -88,7 +90,20 @@ export class AuthService {
 
         const updatedAccount = await this.accountService.generateRecoveryKey(account);
 
-        // send email;
+        const mail = {
+            to: account.email,
+            from: 'noreply@application.com',
+            subject: 'PMFR | Recuperação de Senha',
+            template: 'recover-password',
+            context: {
+                currentTime: `${moment().format('DD/MM/YYYY HH:mm:ss')}`,
+                recoveryKey: account.recoveryKey,
+                fullname: account.fullname
+            },
+        }
+
+        await this.mailerService.sendMail(mail);
+        
         return updatedAccount;
     }
 
@@ -102,7 +117,21 @@ export class AuthService {
         }
 
         const updatedAccount = await this.accountService.changePasswordWithRecoveryKey(account, newPassword);
-        // send email;
+        
+        const mail = {
+            to: account.email,
+            from: 'noreply@application.com',
+            subject: 'PMFR | Alerta de solicitação para alteração de senha',
+            template: 'login-recover',
+            context: {
+                appName: 'Sistema',
+                currentTime: `${moment().format('DD/MM/YYYY HH:mm:ss')}`,
+                fullname: account.fullname
+            },
+        }
+
+        await this.mailerService.sendMail(mail);
+
         return this.createToken(updatedAccount);
     }
 

@@ -45,5 +45,5 @@ Content-Type: application/json
 {
     "username": "admin",
     "newPassword": "12345",
-    "recoveryKey": "xa0dKzCoRy"
+    "recoveryKey": "nqZiw6nOPl"
 }
