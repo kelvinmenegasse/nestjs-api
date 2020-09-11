@@ -6,7 +6,7 @@ import { ValidationParametersPipe } from 'src/shared/pipes/validation-parameters
 import { AppController } from 'src/app.controller';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 
-@Controller('api/admin/accounts')
+@Controller('api/admin/account')
 export class AccountsController {
 
     private logger = new Logger(AppController.name);
