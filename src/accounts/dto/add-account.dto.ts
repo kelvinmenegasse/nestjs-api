@@ -21,5 +21,4 @@ export class AddAccountDTO {
     @IsNotEmpty()
     @IsString()
     level: string;
-
 }

@@ -3,14 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
 import { Repository } from 'typeorm';
 import { AddAccountDTO, UpdateAccountDTO, FindAccountDTO } from './dto';
-import { json } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AccountsService {
     constructor(
         @InjectRepository(Account)
         private accountsRepository: Repository<Account>,
-    ) { }
+        private configService: ConfigService,
+    ) {
+        const account = Object.assign(new Account(), this.configService.get('accountAdminConfig'));
+        this.insertAdminUser(account);
+    }
 
     async fetchAll(): Promise<Account[]> {
         return await this.accountsRepository.find({ status: 'ativo'});
@@ -105,7 +109,6 @@ export class AccountsService {
             username, status: 'ativo' }
         );
     }
-
     
     async generateRecoveryKey(account: Account): Promise<Account> {
         
@@ -127,6 +130,18 @@ export class AccountsService {
         account.recoveryKey = null;
 
         return await this.accountsRepository.save(account);
+    }
+
+    async insertAdminUser(account: Account): Promise<void> {
+        const accountFound = await this.find({
+            id: account.id,
+            username: account.username
+        });
+
+        if (!accountFound) {
+            const newAccount = await this.addAccount(account);
+            console.log(`ADMIN ACCOUNT "${newAccount.username.toUpperCase()}" CREATED`);
+        }
     }
     
 }

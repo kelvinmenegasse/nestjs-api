@@ -1,33 +1,42 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
-import { BaseEntity } from 'src/shared/entities/base-entity';
 import * as bcrypt from 'bcryptjs';
 
 @Entity()
-export class Account extends BaseEntity {
+export class Account {
 
-    @Column(({ type: 'varchar', width: 255, nullable: true }))
-    recoveryKey;
-
-    @Column(({ type: 'datetime', nullable: true }))
-    lastLoginDate;
-
-    @Column(({ type: 'varchar', width: 255 }))
-    level;
-
-    @Column(({ type: 'varchar', width: 255 }))
-    fullname;
-
-    @Column(({ type: 'varchar', width: 255 }))
-    password;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column(({ type: 'varchar', width: 255 }))
     username: string;
 
     @Column(({ type: 'varchar', width: 255 }))
     email: string;
+    
+    @Column(({ type: 'varchar', width: 255 }))
+    password;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @Column(({ type: 'varchar', width: 255 }))
+    fullname;
+    
+    @Column(({ type: 'varchar', width: 255 }))
+    level;
+
+    @Column(({ type: 'varchar', width: 255, nullable: true }))
+    recoveryKey;
+
+    @Column(({ type: 'datetime', nullable: true }))
+    lastLoginDate;
+  
+    @Column(({ type: "datetime" }))
+    createdAt: Date = new Date();
+  
+    @Column(({ type: "datetime" }))
+    updatedAt: Date = new Date();
+
+    @Column({ default: 'ativo'})
+    status: string;
+  
 
     @BeforeInsert()
     async hashPassword(newPassword: string = null): Promise<void> {

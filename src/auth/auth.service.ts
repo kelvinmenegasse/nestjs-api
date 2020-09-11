@@ -32,8 +32,15 @@ export class AuthService {
             throw new UnauthorizedException(`Senha inválida`);
         }
 
-        console.log(rememberMe);
-        return this.createToken(account, rememberMe);
+        account.lastLoginDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        const updatedAccount = await this.accountService.updateAccount(account);
+
+        if (!updatedAccount) {
+            throw new UnauthorizedException(`Não foi possível logar`);
+        }
+
+        return this.createToken(updatedAccount, rememberMe);
     }
 
     async refresh(expiredToken: string): Promise<string> {
@@ -53,7 +60,15 @@ export class AuthService {
             });
         }
 
-        return this.createToken(account, payload.remember);
+        account.lastLoginDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        const updatedAccount = await this.accountService.updateAccount(account);
+
+        if (!updatedAccount) {
+            throw new UnauthorizedException(`Não foi possível logar`);
+        }
+
+        return this.createToken(updatedAccount, payload.remember);
 
     }
 
@@ -117,8 +132,14 @@ export class AuthService {
             throw new UnauthorizedException(`Usuário e/ou código de recuperação inválido(s)`);
         }
 
+        account.lastLoginDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
         const updatedAccount = await this.accountService.changePasswordWithRecoveryKey(account, newPassword);
         
+        if (!updatedAccount) {
+            throw new UnauthorizedException(`Não foi possível logar`);
+        }
+
         const mail = {
             to: account.email,
             from: 'noreply@application.com',
@@ -132,6 +153,10 @@ export class AuthService {
         }
 
         await this.mailerService.sendMail(mail);
+
+        if (!updatedAccount) {
+            throw new UnauthorizedException(`Não foi possível logar`);
+        }
 
         return this.createToken(updatedAccount);
     }
