@@ -2,7 +2,8 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
 import { Repository } from 'typeorm';
-import { AddAccountDTO, UpdateAccountDTO } from './dto';
+import { AddAccountDTO, UpdateAccountDTO, FindAccountDTO } from './dto';
+import { json } from 'express';
 
 @Injectable()
 export class AccountsService {
@@ -15,16 +16,16 @@ export class AccountsService {
         return await this.accountsRepository.find({ status: 'ativo'});
     }
 
-    async getByID(accountID: number): Promise<Account>{
-        return await this.accountsRepository.findOne({ accountID });
-    }
-
-    async getByEmail(email: string): Promise<Account>{
-        return await this.accountsRepository.findOne({ email });
+    async getByID(id: number): Promise<Account>{
+        return await this.accountsRepository.findOne({ id });
     }
 
     async getByUsername(username: string): Promise<Account>{
         return await this.accountsRepository.findOne({ username });
+    }
+
+    async find(findAccountDTO: FindAccountDTO): Promise<Account>{
+        return await this.accountsRepository.findOne({ where: findAccountDTO });
     }
 
     async addAccount(account: AddAccountDTO): Promise<Account> {
@@ -42,25 +43,27 @@ export class AccountsService {
         return await this.accountsRepository.save(newAccount);
     }
 
-    async updateAccount(accountID: number, updateAccount: UpdateAccountDTO): Promise<Account> {
+    async updateAccount(account: UpdateAccountDTO): Promise<Account> {
+        
+        const id: number = account.id;
 
-        const accountFound = await this.accountsRepository.findOne({ accountID });
+        const accountFound = await this.accountsRepository.findOne({ id });
 
         if (!accountFound) {
-            throw new NotFoundException(`Conta com ID "${accountID}" não encontrada`);
+            throw new NotFoundException(`Conta com ID "${id}" não encontrada`);
         }
 
-        const newAccount = Object.assign(accountFound, updateAccount);
+        const updatedAccount = Object.assign(accountFound, account);
 
-        return await this.accountsRepository.save(newAccount);
+        return await this.accountsRepository.save(updatedAccount);
     }
 
-    async removeAccount(accountID: number): Promise<Account> {
+    async removeAccount(id: number): Promise<Account> {
 
-        const accountFound = await this.accountsRepository.findOne({ accountID });
+        const accountFound = await this.accountsRepository.findOne({ id });
 
         if (!accountFound) {
-            throw new NotFoundException(`Conta com ID "${accountID}" não encontrada`);
+            throw new NotFoundException(`Conta com ID "${id}" não encontrada`);
         }
 
         const newAccount = Object.assign(accountFound, {
@@ -71,15 +74,29 @@ export class AccountsService {
 
     }
 
-    async permanentlyDeleteAccount(accountID: number): Promise<any> {
+    async permanentlyDeleteAccount(id: number): Promise<any> {
 
-        const accountFound = await this.accountsRepository.findOne({ accountID });
+        let accountFound = await this.accountsRepository.findOne({ id });
 
         if (!accountFound) {
-            throw new NotFoundException(`Conta com ID "${accountID}" não encontrada`);
+            throw new NotFoundException(`Conta com ID "${id}" não encontrada`);
         }
 
-        return await this.accountsRepository.delete(accountID);
+        await this.accountsRepository.delete(id);
+
+        accountFound = await this.accountsRepository.findOne({ id });
+
+        if (accountFound) {
+            return JSON.stringify({
+                message: `Não foi possível deletar a conta com ID "${id}"`,
+                type: 'error',
+            });
+        }
+
+        return JSON.stringify({
+            message: 'Deletado com sucesso',
+            type: 'success',
+        });
 
     }
 

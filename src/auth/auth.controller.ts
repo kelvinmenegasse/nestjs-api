@@ -44,10 +44,3 @@ export class AuthController {
 
 
 }
-
-
-    // login => req credentials res token
-    // verify token req token res true/false
-    // refresh token req token res token
-    // send recovery key  req username send email with recovery key
-    // login recovery key credentials + recovery key

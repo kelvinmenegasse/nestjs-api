@@ -32,6 +32,7 @@ export class AuthService {
             throw new UnauthorizedException(`Senha inválida`);
         }
 
+        console.log(rememberMe);
         return this.createToken(account, rememberMe);
     }
 
@@ -135,15 +136,15 @@ export class AuthService {
         return this.createToken(updatedAccount);
     }
 
-    createToken(account: Account, remember = false): string {
-        const rnwTimestamp = this.createRenewalTime();
+    createToken(account: Account, rememberMe = false): string {
+        const rnwTimestamp = this.createRenewalTime(rememberMe);
 
         const token = this.jwtService.sign({
-            id: account.accountID,
+            id: account.id,
             username: account.username,
             email: account.email,
             level: account.level,
-            remember: remember,
+            remember: rememberMe,
             rnw: rnwTimestamp
         });
 

@@ -8,8 +8,9 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  
   // Exception Filter
-  // app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalFilters(new AllExceptionFilter());
 
   Date.prototype.toJSON = function (): any {
     return momentTimeZone(this).tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss.SSS');

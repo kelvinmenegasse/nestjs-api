@@ -27,7 +27,7 @@ export class Account extends BaseEntity {
     email: string;
 
     @PrimaryGeneratedColumn()
-    accountID: number;
+    id: number;
 
     @BeforeInsert()
     async hashPassword(newPassword: string = null): Promise<void> {

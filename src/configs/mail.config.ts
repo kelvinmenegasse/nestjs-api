@@ -12,7 +12,7 @@ export const mailerConfig: MailerOptions = {
         },
     },
     transport: `smtps://` +
-     process.env.EMAILCONTACT_ACCOUNT + 
-     process.env.EMAILCONTACT_PASSWORD  + 
-     `@smtp.gmail.com`,
-};
+        process.env.EMAILCONTACT_ACCOUNT +
+        process.env.EMAILCONTACT_PASSWORD +
+        `@smtp.gmail.com`,
+}
