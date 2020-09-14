@@ -1,12 +1,12 @@
 ### ACCOUNT
 
 ### List
-GET /api/admin/channel/list HTTP/1.1
+GET /api/admin/category/list HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 
 ### Add
-POST /api/admin/channel/add HTTP/1.1
+POST /api/admin/category/add HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 Content-Type: application/json
@@ -16,41 +16,27 @@ Content-Type: application/json
 }
 
 ### Find
-POST /api/admin/channel/get/1 HTTP/1.1
+POST /api/admin/category/get/1 HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 
 ### Update
-POST /api/admin/channel/update HTTP/1.1
+POST /api/admin/category/update HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 Content-Type: application/json
 
 {
     "id": 1,
-    "title": "channel 1",
+    "title": "category 1",
 }
 
 ### Remove
-POST /api/admin/channel/remove/1 HTTP/1.1
+POST /api/admin/category/remove/1 HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 
 ### Permanently Delete
-POST /api/admin/channel/delete/1 HTTP/1.1
+POST /api/admin/category/delete/1 HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
-
-
-### Upload Thumbnail
-POST /api/admin/channel/upload-thumbnail/5 HTTP/1.1
-Host: localhost:3000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="test.png"
-Content-Type: image/png
-
-< ./files/test.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW--

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { config } from './configs/env.config';;
 import { mailerConfig } from './configs/mail.config';
 import { ChannelModule } from './channel/channel.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ChannelModule } from './channel/channel.module';
     AccountsModule,
     AuthModule,
     ChannelModule,
+    CategoryModule,
   ],
   controllers: [
     AppController
