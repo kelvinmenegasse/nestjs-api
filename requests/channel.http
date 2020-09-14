@@ -9,11 +9,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 POST /api/admin/channel/add HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
-Content-Type: application/json
+Accept: application/json
+Content-Type: multipart/form-data
 
 {
-    "title": "test",
-    "url_image": "www.google.com.br"
+    "title": "test"
 }
 
 ### Find
@@ -30,7 +30,6 @@ Content-Type: application/json
 {
     "id": 1,
     "title": "channel 1",
-    "url_image": "www.google.com.br"
 }
 
 ### Remove
@@ -42,3 +41,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 POST /api/admin/channel/delete/1 HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
+
+
+### Upload Thumbnail
+POST /api/admin/channel/upload-thumbnail/5 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.png"
+Content-Type: image/png
+
+< ./files/test.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

@@ -1,6 +1,4 @@
-import {
-    Controller, Post, Get, Body, Param, UsePipes, ValidationPipe, Logger, UseGuards, UseInterceptors, UploadedFile, Res
-} from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UsePipes, ValidationPipe, Logger, UseGuards, UseInterceptors, UploadedFile, Res, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationParametersPipe } from 'src/shared/pipes/validation-parameters.pipe';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
@@ -8,6 +6,7 @@ import { AppController } from 'src/app.controller';
 import { ChannelService } from './channel.service';
 import { Channel } from './entities/channel.entity';
 import { AddChannelDTO, UpdateChannelDTO, FindChannelDTO } from './dto';
+import { files, channelThumbnailStorage } from 'src/configs/storage.config';
 
 @Controller('api/admin/channel')
 export class ChannelController {
@@ -26,22 +25,36 @@ export class ChannelController {
 
     @Post('get/:id')
     @UseGuards(JwtAuthGuard)
-    async getChannel(@Param('id', ValidationParametersPipe) id: number): Promise<any> {
-        console.log(id)
+    async getChannel(@Param('id', ValidationParametersPipe) id: number): Promise<Channel> {
         return await this.channelService.getByID(id);
+    }
+
+    @Post('thumbnail/:id')
+    @UseGuards(JwtAuthGuard)
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async getThumbnail(
+        @Param('id', ValidationParametersPipe) id: number,
+        @Res() res
+    ): Promise<any> {
+        return await res.sendFile(id, { root: files.channelThumbnail});
     }
 
     @Post('add')
     @UseGuards(JwtAuthGuard)
     @UsePipes(ValidationPipe)
-    async addChannel(@Body() channel: AddChannelDTO): Promise<Channel | null> {
+    async addChannel(
+        @Body() channel: AddChannelDTO,
+    ): Promise<Channel | null> {
         return await this.channelService.addChannel(channel);
     }
 
     @Post('update')
     @UseGuards(JwtAuthGuard)
     @UsePipes(ValidationPipe)
-    async updateChannel(@Body() channel: UpdateChannelDTO): Promise<Channel> {
+    async updateChannel(
+        @Body() channel: UpdateChannelDTO
+    ): Promise<Channel> {
+
         return await this.channelService.updateChannel(channel);
     }
 
@@ -57,19 +70,20 @@ export class ChannelController {
         return await this.channelService.permanentlyDeleteChannel(id);
     }
 
-    @Post('upload-image')
+    @Post('upload-thumbnail/:id')
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(FileInterceptor('file'))
-    async uploadThumb(@Body() bla: any, @UploadedFile() file, @Res() res: any): Promise<Channel | null> {
-        return res.sendFile(file, { root: './files' });
+    @UsePipes(ValidationPipe)
+    @UseInterceptors(FileInterceptor('file', channelThumbnailStorage))
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async uploadThumbnail(
+        @Param('id', ValidationParametersPipe) id: number,
+        @UploadedFile() file
+    ): Promise<Channel> {
+
+        if (!file || !file.filename) {
+            throw new BadRequestException(`Arquivo inválido`);   
+        }
+
+        return this.channelService.changeThumbnail(id, file.filename);
     }
-
-    // list
-    // get -> id
-    // add -> channel
-    // update -> channel
-    // remove -> id
-    // delete -> id
-    // upload -> id, file
-
 }

@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from './entities/channel.entity';
 import { Repository } from 'typeorm';
 import { AddChannelDTO, UpdateChannelDTO, FindChannelDTO } from './dto';
+import { FileSystemUtils } from 'src/shared/utils/file-system.utils';
+import { files } from 'src/configs/storage.config';
 
 @Injectable()
 export class ChannelService {
@@ -67,7 +69,7 @@ export class ChannelService {
 
     async permanentlyDeleteChannel(id: number): Promise<any> {
 
-        let channelFound = await this.channelRepository.findOne({ id });
+        const channelFound = await this.channelRepository.findOne({ id });
 
         if (!channelFound) {
             throw new NotFoundException(`Canal com ID "${id}" não encontrado`);
@@ -75,19 +77,30 @@ export class ChannelService {
 
         await this.channelRepository.delete(id);
 
-        channelFound = await this.channelRepository.findOne({ id });
+        const ChannelDeleted = await this.channelRepository.findOne({ id });
 
-        if (channelFound) {
+        if (ChannelDeleted) {
             return JSON.stringify({
                 message: `Não foi possível deletar o canal com ID "${id}"`,
                 type: 'error',
             });
         }
 
+        await FileSystemUtils.remove(`./${files.channelThumbnail}/${channelFound.url_image}`);
+
         return JSON.stringify({
             message: 'Deletado com sucesso',
             type: 'success',
         });
+    }
 
+    async changeThumbnail(id: number, file: string): Promise<Channel> {
+        const channel = await this.getByID(id);
+            
+        await FileSystemUtils.remove(`./${files.channelThumbnail}/${channel.url_image}`);
+
+        channel.url_image =  file;
+
+        return await this.updateChannel(channel);
     }
 }

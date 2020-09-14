@@ -9,9 +9,7 @@ import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Channel]),
-    MulterModule.register({
-      dest: './files',
-    }),
+    MulterModule.register(),
     AuthModule
   ],
   controllers: [ChannelController],
