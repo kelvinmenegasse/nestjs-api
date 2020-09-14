@@ -9,6 +9,7 @@ import { config } from './configs/env.config';;
 import { mailerConfig } from './configs/mail.config';
 import { ChannelModule } from './channel/channel.module';
 import { CategoryModule } from './category/category.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CategoryModule } from './category/category.module';
     AuthModule,
     ChannelModule,
     CategoryModule,
+    FileModule,
   ],
   controllers: [
     AppController

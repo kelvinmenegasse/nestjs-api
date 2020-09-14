@@ -86,7 +86,7 @@ export class ChannelService {
             });
         }
 
-        await FileSystemUtils.remove(`./${files.channelThumbnail}/${channelFound.url_image}`);
+        await FileSystemUtils.remove(`./${files.channelThumbnailDirectory}/${channelFound.url_image}`);
 
         return JSON.stringify({
             message: 'Deletado com sucesso',
@@ -97,7 +97,7 @@ export class ChannelService {
     async changeThumbnail(id: number, file: string): Promise<Channel> {
         const channel = await this.getByID(id);
             
-        await FileSystemUtils.remove(`./${files.channelThumbnail}/${channel.url_image}`);
+        await FileSystemUtils.remove(`./${files.channelThumbnailDirectory}/${channel.url_image}`);
 
         channel.url_image =  file;
 

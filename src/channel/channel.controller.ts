@@ -36,7 +36,7 @@ export class ChannelController {
         @Param('id', ValidationParametersPipe) id: number,
         @Res() res
     ): Promise<any> {
-        return await res.sendFile(id, { root: files.channelThumbnail});
+        return await res.sendFile(id, { root: files.channelThumbnailDirectory});
     }
 
     @Post('add')
