@@ -1,3 +1,3 @@
-# Blog-NestJSAPI
+# BlogAPI
 
-An API for a Simple Blog.
+An API for a simple Blog.
