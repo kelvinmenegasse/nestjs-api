@@ -8,7 +8,7 @@ export class FindFileDTO {
 
     @IsOptional()
     @IsNumber()
-    articleId?: number;
+    article?: number;
 
     @IsOptional()
     @IsString()

@@ -8,7 +8,7 @@ export class AddArticleDTO {
 
     @IsOptional()
     @IsString()
-    summary: string;
+    summary?: string;
 
     @IsOptional()
     @IsString()
@@ -20,27 +20,27 @@ export class AddArticleDTO {
 
     @IsOptional()
     @IsString()
-    dateEnd: string;
+    dateEnd?: string;
 
     @IsOptional()
     @IsString()
-    tags: string;
+    tags?: string[];
 
     @IsOptional()
     @IsBoolean()
-    featured: boolean;
+    featured?: boolean;
     
     @IsNotEmpty()
     @IsNumber()
-    accountId: number;
+    account: number;
 
     @IsNotEmpty()
     @IsNumber()
-    channelId: number;
+    channel: number;
 
     @IsNotEmpty()
     @IsNumber()
-    categoryId: number;
+    category: number;
 
     @IsOptional()
     @IsString()

@@ -8,7 +8,7 @@ export class UpdateFileDTO {
 
     @IsNotEmpty()
     @IsNumber()
-    articleId: number;
+    article: number;
 
     @IsNotEmpty()
     @IsString()

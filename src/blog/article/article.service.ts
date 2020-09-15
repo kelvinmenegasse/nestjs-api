@@ -31,7 +31,7 @@ export class ArticleService {
         return await this.articleRepository.save(newArticle);
     }
 
-    async updateArticle(article: UpdateArticleDTO): Promise<Article> {
+    async updateArticle(article: UpdateArticleDTO | Article): Promise<Article> {
 
         const id: number = article.id;
 

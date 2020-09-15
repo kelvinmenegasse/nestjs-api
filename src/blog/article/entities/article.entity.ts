@@ -43,7 +43,7 @@ export class Article {
     @ManyToOne(type => Category, category => category.articles)
     category: Category;
 
-    @Column({ default: 'ativo' })
+    @Column({ default: 'ativo' })    
     status: string;
 
     @Column(({ type: "datetime" }))
@@ -55,3 +55,4 @@ export class Article {
     @OneToMany(type => File, file => file.article)
     files: File[]
 }
+

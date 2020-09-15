@@ -25,5 +25,4 @@ export class Channel {
     @OneToMany(type => Article, article => article.channel)
     articles: Article[]
 
-
 }
