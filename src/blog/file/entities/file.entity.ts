@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { Article } from 'src/blog/article/entities/article.entity';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToOne } from 'typeorm';
 
 @Entity()
 export class File {
@@ -32,6 +33,9 @@ export class File {
 
     @Column(({ type: "datetime" }))
     updatedAt: Date = new Date();
+
+    @ManyToOne(type => Article, article => article.files)
+    article: Article;
 
     @BeforeInsert()
     setPostedAt(): void {

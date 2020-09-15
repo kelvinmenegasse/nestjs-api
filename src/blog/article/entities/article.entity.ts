@@ -1,4 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { Account } from 'src/accounts/entities/account.entity';
+import { Category } from 'src/blog/category/entities/category.entity';
+import { Channel } from 'src/blog/channel/entities/channel.entity';
+import { File } from 'src/blog/file/entities/file.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Article {
@@ -30,14 +34,14 @@ export class Article {
     @Column(({ type: 'tinyint' }))
     featured = false;
 
-    @Column(({ type: 'int' }))
-    accountId: number;
+    @ManyToOne(type => Account, account => account.articles)
+    account: Account;
 
-    @Column(({ type: 'int' }))
-    channelId: number;
+    @ManyToOne(type => Channel, channel => channel.articles)
+    channel: Channel;
 
-    @Column(({ type: 'int' }))
-    categoryId: number;
+    @ManyToOne(type => Category, category => category.articles)
+    category: Category;
 
     @Column({ default: 'ativo' })
     status: string;
@@ -47,4 +51,7 @@ export class Article {
 
     @Column(({ type: "datetime" }))
     updatedAt: Date = new Date();
+
+    @OneToMany(type => File, file => file.article)
+    files: File[]
 }

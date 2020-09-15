@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Article } from 'src/blog/article/entities/article.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Channel {
@@ -20,5 +21,9 @@ export class Channel {
 
     @Column(({ type: "datetime" }))
     updatedAt: Date = new Date();
+
+    @OneToMany(type => Article, article => article.channel)
+    articles: Article[]
+
 
 }

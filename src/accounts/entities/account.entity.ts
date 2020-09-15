@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Article } from 'src/blog/article/entities/article.entity';
 
 @Entity()
 export class Account {
@@ -36,8 +37,10 @@ export class Account {
 
     @Column({ default: 'ativo'})
     status: string;
-  
 
+    @OneToMany(type => Article, article => article.account)
+    articles: Article[]
+  
     @BeforeInsert()
     async hashPassword(newPassword: string = null): Promise<void> {
         this.password = newPassword !== null ? newPassword : this.password;
