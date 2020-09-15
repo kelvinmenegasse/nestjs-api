@@ -4,7 +4,7 @@ export class AddFileDTO {
 
     @IsNotEmpty()
     @IsNumber()
-    postId: number;
+    articleID: number;
 
     @IsNotEmpty()
     @IsString()

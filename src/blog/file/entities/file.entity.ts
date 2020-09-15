@@ -7,7 +7,7 @@ export class File {
     id: number;
 
     @Column(({ type: 'int' }))
-    postId: number;
+    articleId: number;
 
     @Column(({ type: 'varchar', width: 2048 }))
     url: string;

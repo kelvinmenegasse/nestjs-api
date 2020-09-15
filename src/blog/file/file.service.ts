@@ -73,23 +73,23 @@ export class FileService {
 
         if (FileDeleted) {
             return JSON.stringify({
-                message: `Não foi possível deletar o arquivo com ID "${id}"`,
-                type: 'error',
+                "message": `Não foi possível deletar o arquivo com ID "${id}"`,
+                "type": 'error',
             });
         }
 
-        await FileSystemUtils.remove(`./${files.attachsDirectory}/${fileFound.url}`);
+        await FileSystemUtils.remove(`./${files.attachmentsDirectory}/${fileFound.url}`);
 
         return JSON.stringify({
-            message: 'Deletado com sucesso',
-            type: 'success',
+            "message": 'Deletado com sucesso',
+            "type": "success",
         });
     }
 
     async changeAttach(id: number, attach: string): Promise<File> {
         const file = await this.getByID(id);
             
-        await FileSystemUtils.remove(`./${files.attachsDirectory}/${file.url}`);
+        await FileSystemUtils.remove(`./${files.attachmentsDirectory}/${file.url}`);
 
         file.url =  attach;
 

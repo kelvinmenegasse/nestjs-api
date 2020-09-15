@@ -7,9 +7,7 @@ import { AccountsModule } from './accounts/accounts.module';
 import { AuthModule } from './auth/auth.module';
 import { config } from './configs/env.config';;
 import { mailerConfig } from './configs/mail.config';
-import { ChannelModule } from './channel/channel.module';
-import { CategoryModule } from './category/category.module';
-import { FileModule } from './file/file.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -21,14 +19,11 @@ import { FileModule } from './file/file.module';
     DatabaseModule,
     AccountsModule,
     AuthModule,
-    ChannelModule,
-    CategoryModule,
-    FileModule,
+    BlogModule,
   ],
   controllers: [
     AppController
   ],
-  providers: [
-  ],
+  providers: [],
 })
 export class AppModule { }

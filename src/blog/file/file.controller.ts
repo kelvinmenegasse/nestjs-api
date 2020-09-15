@@ -36,7 +36,7 @@ export class FileController {
         @Param('id', ValidationParametersPipe) id: number,
         @Res() res
     ): Promise<any> {
-        return await res.sendFile(id, { root: files.attachsDirectory});
+        return await res.sendFile(id, { root: files.attachmentsDirectory});
     }
 
     @Post('add')

@@ -79,14 +79,14 @@ export class CategoryService {
 
         if (CategoryDeleted) {
             return JSON.stringify({
-                message: `Não foi possível deletar a categoria com ID "${id}"`,
-                type: 'error',
+                "message": `Não foi possível deletar a categoria com ID "${id}"`,
+                "type": "error",
             });
         }
 
         return JSON.stringify({
-            message: 'Deletado com sucesso',
-            type: 'success',
+            "message": "Deletado com sucesso",
+            "type": "success",
         });
     }
 }
