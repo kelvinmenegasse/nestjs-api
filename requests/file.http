@@ -12,7 +12,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 Content-Type: application/json
 
 {
-    "postId": 1,
+    "article": 1,
     "name": "test",
     "description": "lorem ipsum dolor sit amet"
 }
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
     "id": 1,
-    "postId": 1,
+    "article": 1,
     "name": "test 123",
     "description": "lorem ipsum dolor sit amet"
 }

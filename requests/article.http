@@ -19,9 +19,9 @@ Content-Type: application/json
     "dateEnd": null,
     "tags": "[\"tag 1\", \"tag 2\", \"tag 3\"]",
     "featured": true,
-    "accountId": 1,
-    "channelId": 1,
-    "categoryId": 1
+    "account": 1,
+    "channel": 1,
+    "category": 1
 }
 
 ### Find
@@ -44,9 +44,9 @@ Content-Type: application/json
     "dateEnd": null,
     "tags": "[\"tag 1\", \"tag 2\", \"tag 3\", \"tag 4\"]",
     "featured": true,
-    "accountId": 1,
-    "channelId": 1,
-    "categoryId": 1
+    "account": 1,
+    "channel": 1,
+    "category": 1
 }
 
 ### Remove
@@ -59,6 +59,10 @@ POST /api/admin/article/delete/2 HTTP/1.1
 Host: localhost:3000
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 
+### Get Thumbnail
+POST /api/admin/article/thumbnail/test-1600192331589.png HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoia2VsdmluLm1lbmVnYXNzZUBmcmFuY29kYXJvY2hhLnNwLmdvdi5iciIsImxldmVsIjoiYWRtaW5pc3RyYXRvciIsInJlbWVtYmVyIjpmYWxzZSwicm53IjoxNjAyNDcxMDI4LCJpYXQiOjE1OTk4NDMwMjgsImV4cCI6MTYwMjQ3MTAyOH0.scv3MGm9HBtWwT6zX8h0bVummgiPj6QqRXYDwC2po6A
 
 ### Upload Thumbnail
 POST /api/admin/article/upload-thumbnail/1 HTTP/1.1

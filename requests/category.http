@@ -28,7 +28,7 @@ Content-Type: application/json
 
 {
     "id": 1,
-    "title": "category 1",
+    "title": "category 1"
 }
 
 ### Remove
